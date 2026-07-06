@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: angular-java-assessment
+
+  datasource:
+    # In-memory SQLite. SQLite's in-memory DB lives inside a single connection,
+    # so we pin the pool to one long-lived connection to keep the schema + data
+    # alive for the whole app lifetime (good talking point in the interview).
+    url: "jdbc:sqlite::memory:"
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      maximum-pool-size: 1
+      max-lifetime: 0
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Java 21+ virtual threads: one line, big conversation.
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
