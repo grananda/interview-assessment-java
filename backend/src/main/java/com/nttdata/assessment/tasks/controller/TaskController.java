@@ -1,17 +1,14 @@
 package com.nttdata.assessment.tasks.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nttdata.assessment.tasks.domain.TaskStatus;
 import com.nttdata.assessment.tasks.dto.TaskResponse;
 import com.nttdata.assessment.tasks.dto.TaskStatsResponse;
 import com.nttdata.assessment.tasks.dto.UpdateTaskStatusRequest;
@@ -29,12 +26,10 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    /**
-     * GET /api/tasks?status=... — the (optionally filtered) task list.
-     */
+    /** GET /api/tasks — the task forest (root tasks with nested subtasks). */
     @GetMapping
-    public List<TaskResponse> findAll(@RequestParam Optional<TaskStatus> status) {
-        return taskService.findAll(status);
+    public List<TaskResponse> findAll() {
+        return taskService.findAll();
     }
 
     /**
@@ -46,7 +41,7 @@ public class TaskController {
     }
 
     /**
-     * GET /api/tasks/{id} — a single task or 404 (ProblemDetail) when missing.
+     * GET /api/tasks/{id} — a single task with its subtree, or 404 (ProblemDetail).
      */
     @GetMapping("/{id}")
     public TaskResponse findOne(@PathVariable long id) {
