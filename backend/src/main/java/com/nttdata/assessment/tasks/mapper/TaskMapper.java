@@ -36,6 +36,11 @@ public class TaskMapper {
         return toResponse(root, groupByParent(allTasks));
     }
 
+    /** Maps a single task on its own, without its subtree (empty subtasks). */
+    public TaskResponse toResponse(Task task) {
+        return map(task, List.of());
+    }
+
     private Map<Long, List<Task>> groupByParent(List<Task> allTasks) {
         return allTasks.stream().collect(Collectors.groupingBy(this::parentKey));
     }
@@ -52,6 +57,10 @@ public class TaskMapper {
     }
 
     private TaskResponse toResponse(Task task, Map<Long, List<Task>> byParent) {
+        return map(task, buildChildren(task.getId(), byParent));
+    }
+
+    private TaskResponse map(Task task, List<TaskResponse> subtasks) {
         return new TaskResponse(
                 task.getId(),
                 task.getTitle(),
@@ -61,6 +70,6 @@ public class TaskMapper {
                 task.getProject() != null ? task.getProject().getName() : null,
                 LocalDate.ofInstant(task.getCreatedAt(), ZoneOffset.UTC),
                 task.getDueDate(),
-                buildChildren(task.getId(), byParent));
+                subtasks);
     }
 }

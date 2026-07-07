@@ -1,6 +1,8 @@
 package com.nttdata.assessment.tasks.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +57,12 @@ public class TaskService {
      */
     @Transactional
     public TaskResponse updateStatus(long id, TaskStatus status) {
-        throw new UnsupportedOperationException("TODO (candidate): implement updateStatus");
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        task.setStatus(status);
+        Task saved = taskRepository.save(task);
+        return taskMapper.toResponse(saved);
     }
 
     /**
@@ -72,6 +79,13 @@ public class TaskService {
      */
     @Transactional(readOnly = true)
     public TaskStatsResponse getStats() {
-        throw new UnsupportedOperationException("TODO (candidate): implement getStats with the Stream API");
+        List<Task> all = taskRepository.findAll();
+
+        Map<String, Long> byStatus = all.stream()
+                .collect(Collectors.groupingBy(task -> task.getStatus().apiValue(), Collectors.counting()));
+        Map<String, Long> byPriority = all.stream()
+                .collect(Collectors.groupingBy(task -> task.getPriority().apiValue(), Collectors.counting()));
+
+        return new TaskStatsResponse(all.size(), byStatus, byPriority);
     }
 }

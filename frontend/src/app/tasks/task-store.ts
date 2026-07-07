@@ -31,15 +31,11 @@ export class TaskStore {
     });
   }
 
-  /**
-   * 🎯 CANDIDATE TASK — persist a task's new status, then refresh the tree.
-   *
-   * Implement it so it calls {@link TaskService.updateStatus} and, on success,
-   * reloads the forest via {@link load}. On error, set `error`. Look at
-   * {@link load} above for the subscribe pattern used in this codebase.
-   */
+  /** Persists a task's new status, then refreshes the tree on success. */
   changeStatus(id: number, status: TaskStatus): void {
-    // TODO (candidate): call taskService.updateStatus(...) and reload on success.
-    throw new Error('Not implemented: changeStatus');
+    this.taskService.updateStatus(id, status).subscribe({
+      next: () => this.load(),
+      error: () => this.error.set('Failed to update the task.'),
+    });
   }
 }

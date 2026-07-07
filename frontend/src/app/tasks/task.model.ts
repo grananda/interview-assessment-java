@@ -24,15 +24,11 @@ export function flatten(task: TaskDto): TaskDto[] {
 }
 
 /**
- * 🎯 CANDIDATE TASK — completion of a subtree.
- *
- * Return the percentage of tasks (the node itself + every descendant) whose
- * status is 'done', as a whole number 0..100. The `flatten` helper above gives
- * you the node plus all its descendants; count how many are 'done' and round.
- *
- * Currently returns 0 as a placeholder so the UI renders while unimplemented.
+ * Completion of a subtree: percentage of tasks (the node itself + every
+ * descendant) whose status is 'done'. Returns a whole number 0..100.
  */
 export function completionPercent(task: TaskDto): number {
-  // TODO (candidate): compute the real percentage using `flatten(task)`.
-  return 0;
+  const all = flatten(task);
+  const done = all.filter((t) => t.status === 'done').length;
+  return Math.round((done / all.length) * 100);
 }
