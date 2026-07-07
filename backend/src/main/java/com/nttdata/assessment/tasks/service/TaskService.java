@@ -33,6 +33,7 @@ public class TaskService {
         List<Task> tasks = status
                 .map(taskRepository::findByStatus)
                 .orElseGet(taskRepository::findAll);
+
         return taskMapper.toResponses(tasks);
     }
 
@@ -43,6 +44,7 @@ public class TaskService {
     public TaskResponse findById(long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
+
         return taskMapper.toResponse(task);
     }
 

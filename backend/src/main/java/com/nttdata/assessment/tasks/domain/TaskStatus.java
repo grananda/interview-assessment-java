@@ -5,7 +5,9 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Lifecycle states a task can be in. API contract uses the snake_case value. */
+/**
+ * Lifecycle states a task can be in. API contract uses the snake_case value.
+ */
 public enum TaskStatus {
     TODO("todo"),
     IN_PROGRESS("in_progress"),
@@ -17,7 +19,9 @@ public enum TaskStatus {
         this.apiValue = apiValue;
     }
 
-    /** Value exposed over the API (used by Jackson for (de)serialization). */
+    /**
+     * Value exposed over the API (used by Jackson for (de)serialization).
+     */
     @JsonValue
     public String apiValue() {
         return apiValue;

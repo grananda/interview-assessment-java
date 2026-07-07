@@ -5,7 +5,9 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Relative importance of a task. API contract uses the lowercase value. */
+/**
+ * Relative importance of a task. API contract uses the lowercase value.
+ */
 public enum TaskPriority {
     LOW("low"),
     MEDIUM("medium"),

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 import com.nttdata.assessment.tasks.domain.Task;
 import com.nttdata.assessment.tasks.dto.TaskResponse;
 
-/** Maps domain {@link Task} entities to API {@link TaskResponse} DTOs. */
+/**
+ * Maps domain {@link Task} entities to API {@link TaskResponse} DTOs.
+ */
 @Component
 public class TaskMapper {
 
@@ -25,7 +27,9 @@ public class TaskMapper {
                 task.getDueDate());
     }
 
-    /** Maps a list preserving order. Uses the Stream API. */
+    /**
+     * Maps a list preserving order. Uses the Stream API.
+     */
     public List<TaskResponse> toResponses(List<Task> tasks) {
         return tasks.stream()
                 .map(this::toResponse)

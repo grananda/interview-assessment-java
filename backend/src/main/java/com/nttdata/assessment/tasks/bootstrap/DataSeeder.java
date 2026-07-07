@@ -15,7 +15,9 @@ import com.nttdata.assessment.tasks.domain.TaskStatus;
 import com.nttdata.assessment.tasks.repository.ProjectRepository;
 import com.nttdata.assessment.tasks.repository.TaskRepository;
 
-/** Seeds demo data on startup (the in-memory DB is empty on every boot). */
+/**
+ * Seeds demo data on startup (the in-memory DB is empty on every boot).
+ */
 @Component
 public class DataSeeder implements ApplicationRunner {
 
