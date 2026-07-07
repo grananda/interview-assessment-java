@@ -50,6 +50,11 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    /** Self-reference: the parent task, or null for a root task. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Task parent;
+
     protected Task() {
         // required by JPA
     }
@@ -99,5 +104,13 @@ public class Task {
 
     public Project getProject() {
         return project;
+    }
+
+    public Task getParent() {
+        return parent;
+    }
+
+    public void setParent(Task parent) {
+        this.parent = parent;
     }
 }

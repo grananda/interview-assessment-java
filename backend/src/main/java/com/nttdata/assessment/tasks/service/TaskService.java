@@ -1,7 +1,6 @@
 package com.nttdata.assessment.tasks.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,27 +24,22 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-    /**
-     * Returns the task list, optionally filtered by status.
-     */
+    /** Returns the whole task forest: root tasks with their subtasks nested. */
     @Transactional(readOnly = true)
-    public List<TaskResponse> findAll(Optional<TaskStatus> status) {
-        List<Task> tasks = status
-                .map(taskRepository::findByStatus)
-                .orElseGet(taskRepository::findAll);
-
-        return taskMapper.toResponses(tasks);
+    public List<TaskResponse> findAll() {
+        return taskMapper.toForest(taskRepository.findAll());
     }
 
     /**
-     * Returns a single task or raises a domain error when it does not exist.
+     * Returns a single task with its subtree, or raises a domain error when it
+     * does not exist.
      */
     @Transactional(readOnly = true)
     public TaskResponse findById(long id) {
-        Task task = taskRepository.findById(id)
+        Task root = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        return taskMapper.toResponse(task);
+        return taskMapper.toSubtree(root, taskRepository.findAll());
     }
 
     /**
@@ -69,7 +63,7 @@ public class TaskService {
      *
      * <p>Implement it so it returns a {@link TaskStatsResponse} with:
      * <ul>
-     *   <li>{@code total}: the number of tasks,</li>
+     *   <li>{@code total}: the number of tasks (the whole tree counts),</li>
      *   <li>{@code byStatus}: count per status, keyed by the enum's API value
      *       (e.g. {@code "in_progress"}),</li>
      *   <li>{@code byPriority}: count per priority, keyed by its API value.</li>
