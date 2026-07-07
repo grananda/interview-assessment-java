@@ -1,0 +1,52 @@
+<div class="node">
+  <div class="node__row">
+    @if (task().subtasks.length) {
+      <button
+        type="button"
+        class="node__toggle"
+        (click)="toggle()"
+        [attr.aria-label]="expanded() ? 'Collapse' : 'Expand'"
+      >
+        {{ expanded() ? '▾' : '▸' }}
+      </button>
+    } @else {
+      <span class="node__toggle node__toggle--leaf">•</span>
+    }
+
+    <span class="node__title">{{ task().title }}</span>
+
+    <span class="badge badge--status badge--{{ task().status }}">
+      {{ task().status }}
+    </span>
+    <span class="badge badge--priority badge--{{ task().priority }}">
+      {{ task().priority }}
+    </span>
+
+    @if (task().subtasks.length) {
+      <span class="node__progress" [title]="completion() + '% done'">
+        <span class="node__progress-fill" [style.width.%]="completion()"></span>
+      </span>
+      <span class="node__progress-label">{{ completion() }}%</span>
+    }
+
+    <label class="node__status">
+      <span class="sr-only">Change status</span>
+      <select
+        [value]="task().status"
+        (change)="onSelect($any($event.target).value)"
+      >
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @if (expanded() && task().subtasks.length) {
+    <div class="node__children">
+      @for (child of task().subtasks; track child.id) {
+        <app-task-node [task]="child" />
+      }
+    </div>
+  }
+</div>

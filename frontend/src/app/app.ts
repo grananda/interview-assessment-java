@@ -1,29 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { HealthService } from './health.service';
+import { Component } from '@angular/core';
+import { TaskTree } from './tasks/task-tree/task-tree';
 
 @Component({
   selector: 'app-root',
+  imports: [TaskTree],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit {
-  private readonly healthService = inject(HealthService);
-
-  protected readonly status = signal<'checking' | 'connected' | 'error'>(
-    'checking',
-  );
-  protected readonly detail = signal<string>('');
-
-  ngOnInit(): void {
-    this.healthService.getHealth().subscribe({
-      next: (health) => {
-        this.status.set('connected');
-        this.detail.set(`${health.service} · ${health.status}`);
-      },
-      error: () => {
-        this.status.set('error');
-        this.detail.set('Could not reach the backend at /api/health');
-      },
-    });
-  }
-}
+export class App {}

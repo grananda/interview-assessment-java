@@ -1,0 +1,24 @@
+<section class="tree">
+  <header class="tree__header">
+    <h1>Tasks</h1>
+    <button type="button" class="tree__reload" (click)="store.load()">
+      Reload
+    </button>
+  </header>
+
+  @if (store.loading()) {
+    <p class="tree__state">Loading…</p>
+  } @else if (store.error()) {
+    <p class="tree__state tree__state--error">{{ store.error() }}</p>
+  } @else if (store.tasks().length === 0) {
+    <p class="tree__state">No tasks found.</p>
+  } @else {
+    <ul class="tree__list">
+      @for (root of store.tasks(); track root.id) {
+        <li>
+          <app-task-node [task]="root"/>
+        </li>
+      }
+    </ul>
+  }
+</section>
